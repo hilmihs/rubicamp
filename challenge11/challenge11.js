@@ -13,6 +13,7 @@ console.log(jawaban[0].definition)
 rl.prompt();
 var count = 0;
 var i = 0
+
 rl.on('line', (isi) => {
     var answer = isi.trim();
     if (answer.toLowerCase() == jawaban[i].term) {
