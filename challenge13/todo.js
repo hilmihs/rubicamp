@@ -117,8 +117,6 @@ if (process.argv[2] == null || process.argv[2] == 'help') {
         fs.writeFileSync('datatodo.json', stringTag)
     }
 } else if (process.argv[2] && ubahString.charAt(0) == 'f') {
-    // let ubahString = process.argv[2].toString();
-    // if ( && ubahString.charAt(1) == 'i') {
         let hilangTitik = ubahString.replace(/:/g, " ")
         let ubahArray = hilangTitik.split(" ")
         console.log('Daftar Pekerjaan')
@@ -135,6 +133,5 @@ if (process.argv[2] == null || process.argv[2] == 'help') {
                 console.log(`${nomerIndex}. ${kondisi} ${jawaban[k][0]}`)
             }
         }
-    // }
 } else {console.log("ERROR : Perintah tidak kenali, silahkan cek => node todo.js help")}
 
