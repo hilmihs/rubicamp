@@ -20,3 +20,9 @@ insert into matakuliah(idmatkul, namamk, peserta) values ('44103', 'Dinamika', '
 insert into dosen(iddosen, nama, mengajar) values ('22101', 'Dr Fahri', '44101');
 insert into dosen(iddosen, nama, mengajar) values ('22102', 'Dr Samsudin', '44102');
 insert into dosen(iddosen, nama, mengajar) values ('22103', 'Dr Ali', '44103');
+
+alter table matakuliah add nilai varchar(3) not null;
+
+update matakuliah set nilai = '085' where peserta = 1;
+update matakuliah set nilai = '090' where peserta = 2;
+update matakuliah set nilai = '100' where peserta = 3;
