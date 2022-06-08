@@ -8,7 +8,7 @@ JAWABAN =
 6. select count(kontrak.nim), kontrak.dosen_id, dosen.nama from kontrak join dosen on kontrak.dosen_id = dosen.iddosen group by dosen_id;
 7. select * from mahasiswa order by umur asc;
 8. select kontrak.id, mahasiswa.nama, mahasiswa.nim, mahasiswa.alamat, mahasiswa.umur,dosen.nama, dosen.iddosen, jurusan.idjurusan, jurusan.namajurusan, matakuliah.idmatkul, matakuliah.namamatkul, matakuliah.sks, kontrak.nilai 
-from ((((kontrak inner join mahasiswa on kontrak.nim = mahasiswa.nim) inner join dosen on kontrak.dosen_id = dosen.iddosen) inner join jurusan on kontrak.jurusan_id = jurusan.idjurusan) inner join matakuliah on kontrak.matkul_id = matakuliah.idmatkul);
+from ((((kontrak inner join mahasiswa on kontrak.nim = mahasiswa.nim) inner join dosen on kontrak.dosen_id = dosen.iddosen) inner join jurusan on kontrak.jurusan_id = jurusan.idjurusan) inner join matakuliah on kontrak.matkul_id = matakuliah.idmatkul) where kontrak.nilai = 'D' or kontrak.nilai =  'E';
 
 ISI TABLE;
 
@@ -80,8 +80,8 @@ update mahasiswa set umur = '20' where nim = '001203';
 update mahasiswa set umur = '21' where nim = '001204';
 update mahasiswa set umur = '22' where nim = '001205';
 
-update kontrak set nilai = 'A' where id = 1;
-update kontrak set nilai = 'B' where id = 2;
+update kontrak set nilai = 'D' where id = 1;
+update kontrak set nilai = 'E' where id = 2;
 update kontrak set nilai = 'C' where id = 3;
 update kontrak set nilai = 'D' where id = 4;
 update kontrak set nilai = 'E' where id = 5;
