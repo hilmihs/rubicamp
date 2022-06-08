@@ -1,35 +1,94 @@
+JAWABAN =
+
+1. select mahasiswa.nama, jurusan.namajurusan from mahasiswa join jurusan on mahasiswa.jurusan = jurusan.idjurusan;
+2. select * from mahasiswa where umur between 0 and 19;
+3. select mahasiswa.nama, kontrak.nilai from mahasiswa join kontrak on mahasiswa.nim = kontrak.nim where nilai = 'B';
+4. select kontrak.matkul_id, mahasiswa.nama, sum(matakuliah.sks) from ((kontrak inner join mahasiswa on kontrak.nim = mahasiswa.nim) inner join matakuliah on kontrak.matkul_id = matakuliah.idmatkul) group by nama having sum(matakuliah.sks) > 10;
+5. select kontrak.matkul_id, mahasiswa.nama, matakuliah.namamatkul from ((kontrak inner join mahasiswa on kontrak.nim = mahasiswa.nim) inner join matakuliah on kontrak.matkul_id = matakuliah.idmatkul) where namamatkul = 'DataMining';
+6. select count(kontrak.nim), kontrak.dosen_id, dosen.nama from kontrak join dosen on kontrak.dosen_id = dosen.iddosen group by dosen_id;
+7. select * from mahasiswa order by umur asc;
+8. select kontrak.id, mahasiswa.nama, mahasiswa.nim, mahasiswa.alamat, mahasiswa.umur,dosen.nama, dosen.iddosen, jurusan.idjurusan, jurusan.namajurusan, matakuliah.idmatkul, matakuliah.namamatkul, matakuliah.sks, kontrak.nilai 
+from ((((kontrak inner join mahasiswa on kontrak.nim = mahasiswa.nim) inner join dosen on kontrak.dosen_id = dosen.iddosen) inner join jurusan on kontrak.jurusan_id = jurusan.idjurusan) inner join matakuliah on kontrak.matkul_id = matakuliah.idmatkul);
+
+ISI TABLE;
+
 create table jurusan(idjurusan integer primary key not null, namajurusan varchar not null);
-create table mahasiswa(nim varchar primary key not null, nama varchar(50) not null, alamat text, jurusan integer not null, foreign key (jurusan) references jurusan(idjurusan));
-create table matakuliah(idmatkul varchar(5) primary key not null, namamatkul varchar(50) not null, sks varchar(4) not null);
+create table mahasiswa(nim varchar primary key not null, 
+nama varchar(50) not null, 
+alamat text, 
+umur varchar(2),
+jurusan integer not null, 
+foreign key (jurusan) references jurusan(idjurusan));
+create table matakuliah(idmatkul varchar(5) primary key not null, namamatkul varchar(50) not null, sks varchar not null);
 create table dosen(iddosen varchar primary key not null, nama varchar(50) not null);
 create table kontrak(
     id integer primary key autoincrement, 
-    nilai varchar(3) not null, 
+    nilai varchar(1) not null, 
     nim varchar, 
      dosen_id varchar,
     matkul_id varchar(5),
+    jurusan_id integer,
     foreign key (nim) references mahasiswa(nim)
     foreign key (dosen_id) references dosen(iddosen)
-    foreign key (matkul_id) references matakuliah(idmatkul));
+    foreign key (matkul_id) references matakuliah(idmatkul)
+    foreign key (jurusan_id) references jurusan(idmatkul));
 
-    insert into jurusan(idjurusan, namajurusan) values ('88101', 'matematika');
+insert into jurusan(idjurusan, namajurusan) values ('88101', 'matematika');
 insert into jurusan(idjurusan, namajurusan) values ('88102', 'biologi');
 insert into jurusan(idjurusan, namajurusan) values ('88103', 'fisika');
+insert into jurusan(idjurusan, namajurusan) values ('88104', 'komputer');
 
-insert into mahasiswa(nim, nama, alamat, jurusan) values ('001201', 'Bagus', 'Kopo', '88101');
-insert into mahasiswa(nim, nama, alamat, jurusan) values ('001202', 'Andi', 'Soreang', '88102');
-insert into mahasiswa(nim, nama, alamat, jurusan) values ('001203', 'Nanda', 'Cicaheum', '88103');
-insert into mahasiswa(nim, nama, alamat, jurusan) values ('001204', 'Fitri', 'Metro', '88102');
-insert into mahasiswa(nim, nama, alamat, jurusan) values ('001205', 'Amir', 'Lembang', '88103');
+insert into mahasiswa(nim, nama, alamat, jurusan, umur) values ('001201', 'Bagus', 'Kopo', '88101', 18);
+insert into mahasiswa(nim, nama, alamat, jurusan, umur) values ('001202', 'Andi', 'Soreang', '88102', 19);
+insert into mahasiswa(nim, nama, alamat, jurusan, umur) values ('001203', 'Nanda', 'Cicaheum', '88103', 20);
+insert into mahasiswa(nim, nama, alamat, jurusan, umur) values ('001204', 'Fitri', 'Metro', '88102', 21);
+insert into mahasiswa(nim, nama, alamat, jurusan, umur) values ('001205', 'Amir', 'Lembang', '88103', 22);
+insert into mahasiswa(nim, nama, alamat, jurusan, umur) values ('001206', 'Aldi', 'Ciparay', '88104', 23);
 
-insert into matakuliah(idmatkul, namamatkul, sks) values ('44101', 'Logaritma', '1jam');
-insert into matakuliah(idmatkul, namamatkul, sks) values ('44102', 'Pencernaan', '2jam');
-insert into matakuliah(idmatkul, namamatkul, sks) values ('44103', 'Dinamika', '3jam');
+insert into matakuliah(idmatkul, namamatkul, sks) values ('44101', 'Logaritma', '1');
+insert into matakuliah(idmatkul, namamatkul, sks) values ('44102', 'Pencernaan', '2');
+insert into matakuliah(idmatkul, namamatkul, sks) values ('44103', 'Dinamika', '3');
+insert into matakuliah(idmatkul, namamatkul, sks) values ('44104', 'DataMining', '2');
+insert into matakuliah(idmatkul, namamatkul, sks) values ('44105', 'Aljabar', '12');
+insert into matakuliah(idmatkul, namamatkul, sks) values ('44106', 'Pernafasan', '6');
+insert into matakuliah(idmatkul, namamatkul, sks) values ('44107', 'Ekosistem', '7');
 
 insert into dosen(iddosen, nama) values ('22101', 'Dr Fahri');
 insert into dosen(iddosen, nama) values ('22102', 'Dr Samsudin');
 insert into dosen(iddosen, nama) values ('22103', 'Dr Ali');
+insert into dosen(iddosen, nama) values ('22104', 'Dr Faisal');
 
-insert into kontrak(nilai, nim, dosen_id, matkul_id) values ('085', '001201', '22101', '44101');
-insert into kontrak(nilai, nim, dosen_id, matkul_id) values ('090', '001202', '22102', '44102');
-insert into kontrak(nilai, nim, dosen_id, matkul_id) values ('100', '001203', '22103', '44103');
+insert into kontrak(nilai, nim, dosen_id, matkul_id, jurusan_id) values ('A', '001201', '22101', '44101', '88101');
+insert into kontrak(nilai, nim, dosen_id, matkul_id, jurusan_id) values ('B', '001202', '22102', '44102', '88102');
+insert into kontrak(nilai, nim, dosen_id, matkul_id, jurusan_id) values ('C', '001203', '22103', '44103', '88103');
+insert into kontrak(nilai, nim, dosen_id, matkul_id, jurusan_id) values ('D', '001204', '22104', '44104', '88104');
+insert into kontrak(nilai, nim, dosen_id, matkul_id, jurusan_id) values ('E', '001205', '22104', '44104', '88104');
+insert into kontrak(nilai, nim, dosen_id, matkul_id, jurusan_id) values ('D', '001201', '22104', '44104', '88104');
+insert into kontrak(nilai, nim, dosen_id, matkul_id, jurusan_id) values ('E', '001206', '22104', '44104', '88104');
+insert into kontrak(nilai, nim, dosen_id, matkul_id, jurusan_id) values ('A', '001203', '22102', '44105', '88101');
+insert into kontrak(nilai, nim, dosen_id, matkul_id, jurusan_id) values ('A', '001204', '22101', '44106', '88102');
+insert into kontrak(nilai, nim, dosen_id, matkul_id, jurusan_id) values ('A', '001205', '22103', '44107', '88102');
+
+
+update matakuliah set sks = '1' where idmatkul = 44101;
+update matakuliah set sks = '2' where idmatkul = 44102;
+update matakuliah set sks = '3' where idmatkul = 44103;
+
+update mahasiswa set umur = '18' where nim = '001201';
+update mahasiswa set umur = '19' where nim = '001202';
+update mahasiswa set umur = '20' where nim = '001203';
+update mahasiswa set umur = '21' where nim = '001204';
+update mahasiswa set umur = '22' where nim = '001205';
+
+update kontrak set nilai = 'A' where id = 1;
+update kontrak set nilai = 'B' where id = 2;
+update kontrak set nilai = 'C' where id = 3;
+update kontrak set nilai = 'D' where id = 4;
+update kontrak set nilai = 'E' where id = 5;
+update kontrak set nilai = 'D' where id = 6;
+
+update kontrak set nim = '001205' where id = 5;
+update kontrak set nim = '001201' where id = 6;
+
+
+
