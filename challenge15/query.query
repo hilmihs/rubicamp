@@ -5,10 +5,10 @@ JAWABAN =
 3. select mahasiswa.nama, kontrak.nilai from mahasiswa join kontrak on mahasiswa.nim = kontrak.nim where nilai = 'B';
 4. select kontrak.matkul_id, mahasiswa.nama, sum(matakuliah.sks) from ((kontrak inner join mahasiswa on kontrak.nim = mahasiswa.nim) inner join matakuliah on kontrak.matkul_id = matakuliah.idmatkul) group by nama having sum(matakuliah.sks) > 10;
 5. select kontrak.matkul_id, mahasiswa.nama, matakuliah.namamatkul from ((kontrak inner join mahasiswa on kontrak.nim = mahasiswa.nim) inner join matakuliah on kontrak.matkul_id = matakuliah.idmatkul) where namamatkul = 'DataMining';
-6. select count(kontrak.nim), kontrak.dosen_id, dosen.nama from kontrak join dosen on kontrak.dosen_id = dosen.iddosen group by dosen_id;
+6. select dosen.nama, kontrak.dosen_id, count(distinct kontrak.nim) as jumlahMahasiswa from kontrak join dosen on kontrak.dosen_id = dosen.iddosen group by dosen_id;
 7. select * from mahasiswa order by umur asc;
 8. select kontrak.id, mahasiswa.nama, mahasiswa.nim, mahasiswa.alamat, mahasiswa.umur,dosen.nama, dosen.iddosen, jurusan.idjurusan, jurusan.namajurusan, matakuliah.idmatkul, matakuliah.namamatkul, matakuliah.sks, kontrak.nilai 
-from ((((kontrak inner join mahasiswa on kontrak.nim = mahasiswa.nim) inner join dosen on kontrak.dosen_id = dosen.iddosen) inner join jurusan on kontrak.jurusan_id = jurusan.idjurusan) inner join matakuliah on kontrak.matkul_id = matakuliah.idmatkul) where kontrak.nilai = 'D' or kontrak.nilai =  'E';
+from ((((kontrak join mahasiswa on kontrak.nim = mahasiswa.nim) join dosen on kontrak.dosen_id = dosen.iddosen) join jurusan on kontrak.jurusan_id = jurusan.idjurusan) join matakuliah on kontrak.matkul_id = matakuliah.idmatkul) where kontrak.nilai = 'D' or kontrak.nilai =  'E';
 
 ISI TABLE;
 
@@ -68,7 +68,9 @@ insert into kontrak(nilai, nim, dosen_id, matkul_id, jurusan_id) values ('E', '0
 insert into kontrak(nilai, nim, dosen_id, matkul_id, jurusan_id) values ('A', '001203', '22102', '44105', '88101');
 insert into kontrak(nilai, nim, dosen_id, matkul_id, jurusan_id) values ('A', '001204', '22101', '44106', '88102');
 insert into kontrak(nilai, nim, dosen_id, matkul_id, jurusan_id) values ('A', '001205', '22103', '44107', '88102');
-
+insert into kontrak(nilai, nim, dosen_id, matkul_id, jurusan_id) values ('D', '001203', '22104', '44104', '88104');
+insert into kontrak(nilai, nim, dosen_id, matkul_id, jurusan_id) values ('C', '001202', '22104', '44104', '88104');
+insert into kontrak(nilai, nim, dosen_id, matkul_id, jurusan_id) values ('B', '001201', '22104', '44104', '88104');
 
 update matakuliah set sks = '1' where idmatkul = 44101;
 update matakuliah set sks = '2' where idmatkul = 44102;
