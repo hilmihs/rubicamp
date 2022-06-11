@@ -9,38 +9,6 @@ const db = new sqlite3.Database('university2.db', sqlite3.OPEN_READWRITE, (err) 
 });
 var Table = require('cli-table');
 const { table } = require('console');
-let simpanlogin = [];
-let perintahlogin = 'SELECT * FROM users'
-db.each(perintahlogin, [], (err, rows) => {
-  if (err) return console.error(err.message);
-  simpanlogin.push(rows);
-})
-
-
-var simpanjurusan = [];
-let perintahjurusan = 'SELECT * FROM jurusan'
-db.each(perintahjurusan, [], (err, rows) => {
-  if (err) return console.error(err.message);
-  simpanjurusan.push(rows);
-})
-var simpandosen = [];
-let perintahdosen = 'SELECT * FROM dosen'
-db.each(perintahdosen, [], (err, rows) => {
-  if (err) return console.error(err.message);
-  simpandosen.push(rows);
-})
-var simpanmatkul = [];
-let perintahmatkul = 'SELECT * FROM matakuliah'
-db.each(perintahmatkul, [], (err, rows) => {
-  if (err) return console.error(err.message);
-  simpanmatkul.push(rows);
-})
-var simpankontrak = [];
-let perintahkontrak = 'SELECT * FROM kontrak'
-db.each(perintahkontrak, [], (err, rows) => {
-  if (err) return console.error(err.message);
-  simpankontrak.push(rows);
-})
 
 loginInterface();
 function loginInterface() {
@@ -49,24 +17,28 @@ function loginInterface() {
   console.log('Jl Setiabudhi No. 255')
   console.log('===============================================================================')
   console.log('Lengkapi data dibawah ini')
-  
   rl.question('Username: ', (input1) => {
     rl.question('Password: ', (input2) => {
-      var kosongmk = []
-  let perintahmatkul = 'SELECT * FROM users where username=?'
-  db.all(perintahmatkul, [input1], (err, rows) => {
-    if (err) {return console.error(err.message);}
-   else {
-     kosongmk.push(rows);
-     if (kosongmk[0][0]) {
-    if (input2 == kosongmk[0][0].password) {
-      console.log(`Welcome, ${kosongmk[0][0].username}. Your access level is ${kosongmk[0][0].access.toUpperCase()}`);
-        mainInterface();
-    }  } else {console.log('Username atau Password salah')
-    loginInterface();}
-    ;} 
+      var kosongmk = [];
+      let perintahmatkul = 'SELECT * FROM users where username=?'
+      db.all(perintahmatkul, [input1], (err, rows) => {
+        if (err) { return console.error(err.message); }
+        else {
+          kosongmk.push(rows);
+          if (kosongmk[0][0]) {
+            if (input2 == kosongmk[0][0].password) {
+              console.log(`Welcome, ${kosongmk[0][0].username}. Your access level is ${kosongmk[0][0].access.toUpperCase()}`);
+              mainInterface();
+            } else {
+              console.log('Username atau Password salah')
+              loginInterface();
+            }
+          } else {
+            console.log('Username atau Password salah')
+            loginInterface();
+          }
+        }
       })
-      
     })
   })
 }
@@ -92,14 +64,16 @@ function mainInterface() {
     } else if (input.trim() == 5) {
       kontrakInterface();
     } else if (input.trim() == 6) {
-      rl.close();
-    } else { console.log('Perintah tidak dikenal') 
-  mainInterface();}
-
+      console.log('===============================================================================')
+      console.log('Kamu telah keluar.');
+      loginInterface();
+    } else {
+      console.log('Perintah tidak dikenal')
+      mainInterface();
+    }
   }
   )
 };
-
 function mahasiswaInterface() {
   console.log('===============================================================================')
   console.log('silahkan pilih opsi dibawah ini')
@@ -120,13 +94,13 @@ function mahasiswaInterface() {
       hapusMahasiswa();
     } else if (input.trim() == 5) {
       mainInterface();
-
-    } else { console.log('Perintah tidak dikenal') 
-  mainInterface();}
+    } else {
+      console.log('Perintah tidak dikenal')
+      mahasiswaInterface();
+    }
   }
   )
 };
-
 function jurusanInterface() {
   console.log('===============================================================================')
   console.log('silahkan pilih opsi dibawah ini')
@@ -147,8 +121,10 @@ function jurusanInterface() {
       hapusJurusan();
     } else if (input.trim() == 5) {
       mainInterface();
-    } else { console.log('Perintah tidak dikenal') 
-    jurusanInterface();}
+    } else {
+      console.log('Perintah tidak dikenal')
+      jurusanInterface();
+    }
   }
   )
 };
@@ -172,8 +148,10 @@ function dosenInterface() {
       hapusDosen();
     } else if (input.trim() == 5) {
       mainInterface();
-    } else { console.log('Perintah tidak dikenal') 
-    dosenInterface();}
+    } else {
+      console.log('Perintah tidak dikenal')
+      dosenInterface();
+    }
   }
   )
 };
@@ -198,8 +176,10 @@ function matkulInterface() {
     } else if (input.trim() == 5) {
       mainInterface();
 
-    } else { console.log('Perintah tidak dikenal') 
-    matkulInterface();}
+    } else {
+      console.log('Perintah tidak dikenal')
+      matkulInterface();
+    }
   }
   )
 };
@@ -224,8 +204,10 @@ function kontrakInterface() {
     } else if (input.trim() == 5) {
       mainInterface();
 
-    } else { console.log('Perintah tidak dikenal') 
-    kontrakInterface();}
+    } else {
+      console.log('Perintah tidak dikenal')
+      kontrakInterface();
+    }
   }
   )
 };
@@ -233,10 +215,10 @@ function tableMahasiswa() {
   console.log('===============================================================================')
   var tablem = new Table({
     head: ['NIM', 'Nama', 'Alamat', 'Jurusan', 'Umur']
-    , colWidths: [20, 20, 20, 20, 20]
+    , colWidths: [15, 15, 15, 15, 15]
   });
   var kosongm = []
-  let perintahmahasiswa = 'SELECT * FROM mahasiswa'
+  let perintahmahasiswa = 'SELECT * FROM mahasiswa order by nim asc'
   db.all(perintahmahasiswa, [], (err, rows) => {
     if (err) return console.error(err.message);
     kosongm.push(rows);
@@ -251,12 +233,15 @@ function tableMahasiswa() {
           if (input.trim() == 1) {
             mahasiswaInterface();
           }
-          else console.log('Perintah tidak dikenal')
+          else {
+            console.log('===============================================================================')
+            console.log('Perintah tidak dikenal')
+            tableMahasiswa();
+          }
         });
       }
     }
   })
-
 }
 function tableJurusan() {
   console.log('===============================================================================')
@@ -265,7 +250,7 @@ function tableJurusan() {
     , colWidths: [20, 20]
   });
   var kosongj = []
-  let perintahjurusan = 'SELECT * FROM jurusan'
+  let perintahjurusan = 'SELECT * FROM jurusan order by idjurusan asc'
   db.all(perintahjurusan, [], (err, rows) => {
     if (err) return console.error(err.message);
     kosongj.push(rows);
@@ -279,13 +264,15 @@ function tableJurusan() {
         rl.question('masukan salah satu no. dari opsi diatas: ', (input) => {
           if (input.trim() == 1) {
             jurusanInterface();
+          } else {
+            console.log('===============================================================================')
+            console.log('Perintah tidak dikenal')
+            tableJurusan();
           }
-          else console.log('Perintah tidak dikenal')
         });
       }
     }
   })
-
 }
 function tableDosen() {
   var tabled = new Table({
@@ -293,7 +280,7 @@ function tableDosen() {
     , colWidths: [20, 20]
   });
   var kosongd = []
-  let perintahdosen = 'SELECT * FROM dosen'
+  let perintahdosen = 'SELECT * FROM dosen order by iddosen asc'
   db.all(perintahdosen, [], (err, rows) => {
     if (err) return console.error(err.message);
     kosongd.push(rows);
@@ -308,7 +295,11 @@ function tableDosen() {
           if (input.trim() == 1) {
             dosenInterface();
           }
-          else console.log('Perintah tidak dikenal')
+          else {
+            console.log('===============================================================================')
+            console.log('Perintah tidak dikenal')
+            tableDosen();
+          }
         });
       }
     }
@@ -320,7 +311,7 @@ function tableMatkul() {
     , colWidths: [20, 20, 20]
   });
   var kosongmk = []
-  let perintahmatkul = 'SELECT * FROM matakuliah'
+  let perintahmatkul = 'SELECT * FROM matakuliah order by idmatkul asc'
   db.all(perintahmatkul, [], (err, rows) => {
     if (err) return console.error(err.message);
     kosongmk.push(rows);
@@ -335,7 +326,12 @@ function tableMatkul() {
           if (input.trim() == 1) {
             matkulInterface();
           }
-          else console.log('Perintah tidak dikenal')
+          else {
+            console.log('===============================================================================')
+            console.log('Perintah tidak dikenal')
+            tableMatkul();
+          }
+
         });
       }
     }
@@ -347,7 +343,7 @@ function tableKontrak() {
     , colWidths: [15, 15, 15, 15, 15, 15]
   });
   var kosongk = []
-  let perintahkontrak = 'SELECT * FROM kontrak'
+  let perintahkontrak = 'SELECT * FROM kontrak order by id asc'
   db.all(perintahkontrak, [], (err, rows) => {
     if (err) return console.error(err.message);
     kosongk.push(rows);
@@ -362,7 +358,11 @@ function tableKontrak() {
           if (input.trim() == 1) {
             kontrakInterface();
           }
-          else console.log('Perintah tidak dikenal')
+          else {
+            console.log('===============================================================================')
+            console.log('Perintah tidak dikenal')
+            tableMatkul();
+          }
         });
       }
     }
@@ -370,12 +370,17 @@ function tableKontrak() {
 }
 function searchMahasiswa() {
   console.log('===============================================================================')
+  console.log('[1] Kembali ke halaman Mahasiswa')
   rl.question('Masukan NIM: ', (input) => {
+    input.trim();
     let carimahasiswa = "SELECT * FROM mahasiswa where nim=?"
     db.all(carimahasiswa, [input], (err, rows) => {
+      input.trim();
       if (err) { return console.error(err.message); }
       else {
         if (rows.length == 1) {
+          console.log('===============================================================================')
+          console.log('Student details')
           console.log('===============================================================================')
           console.log(`NIM              : ${rows[0].nim}`)
           console.log(`Nama             : ${rows[0].nama}`)
@@ -397,8 +402,9 @@ function searchMahasiswa() {
               searchMahasiswa();
             }
           });
-        } else {
-          console.log('NIM tidak dikenal')
+        } else if (input.trim() == 1) { mahasiswaInterface(); } //
+        else {
+          console.log(`Mahasiswa dengan NIM ${input.trim()} tidak dikenal`)
           searchMahasiswa()
         }
       }
@@ -407,12 +413,17 @@ function searchMahasiswa() {
 }
 function searchJurusan() {
   console.log('===============================================================================')
+  console.log('[1] Kembali ke halaman Jurusan')
   rl.question('Masukan ID Jurusan: ', (input) => {
+    input.trim();
     let carijurusan = "SELECT * FROM jurusan where idjurusan=?"
     db.all(carijurusan, [input], (err, rows) => {
+      input.trim();
       if (err) { return console.error(err.message); }
       else {
         if (rows.length == 1) {
+          console.log('===============================================================================')
+          console.log('Major details')
           console.log('===============================================================================')
           console.log(`Nama Jurusan             : ${rows[0].namajurusan}`)
           console.log(`ID Jurusan               : ${rows[0].idjurusan}`)
@@ -431,8 +442,9 @@ function searchJurusan() {
               searchJurusan();
             }
           });
-        } else {
-          console.log('ID Jurusan tidak dikenal')
+        } else if (input.trim() == 1) { jurusanInterface(); }
+        else {
+          console.log(`Jurusan dengan ID ${input.trim()} tidak dikenal`)
           searchJurusan()
         }
       }
@@ -441,12 +453,16 @@ function searchJurusan() {
 }
 function searchDosen() {
   console.log('===============================================================================')
+  console.log('[1] Kembali ke halaman Dosen')
   rl.question('Masukan ID Dosen: ', (input) => {
+    input.trim();
     let caridosen = "SELECT * FROM dosen where iddosen=?"
     db.all(caridosen, [input], (err, rows) => {
       if (err) { return console.error(err.message); }
       else {
         if (rows.length == 1) {
+          console.log('===============================================================================')
+          console.log('Lecturer details')
           console.log('===============================================================================')
           console.log(`Nama Dosen             : ${rows[0].nama}`)
           console.log(`ID Dosen               : ${rows[0].iddosen}`)
@@ -465,8 +481,9 @@ function searchDosen() {
               searchDosen();
             }
           });
-        } else {
-          console.log('ID Dosen tidak dikenal')
+        } else if (input.trim() == 1) { dosenInterface(); }
+        else {
+          console.log(`Dosen dengan ID ${input} tidak dikenal`)
           searchDosen()
         }
       }
@@ -475,12 +492,16 @@ function searchDosen() {
 }
 function searchMatkul() {
   console.log('===============================================================================')
+  console.log('[1] Kembali ke halaman mata kuliah')
   rl.question('Masukan ID Mata kuliah: ', (input) => {
+    input.trim();
     let carimatkul = "SELECT * FROM matakuliah where idmatkul=?"
     db.all(carimatkul, [input], (err, rows) => {
       if (err) { return console.error(err.message); }
       else {
         if (rows.length == 1) {
+          console.log('===============================================================================')
+          console.log('Subject details')
           console.log('===============================================================================')
           console.log(`Nama mata kuliah         : ${rows[0].namamatkul}`)
           console.log(`ID mata kuliah           : ${rows[0].idmatkul}`)
@@ -500,8 +521,9 @@ function searchMatkul() {
               searchMatkul();
             }
           });
-        } else {
-          console.log('ID Matkul tidak dikenal')
+        } else if (input == 1) { matkulInterface(); }
+        else {
+          console.log(`Matkul dengan ID ${input} tidak dikenal`)
           searchMatkul()
         }
       }
@@ -510,12 +532,16 @@ function searchMatkul() {
 }
 function searchKontrak() {
   console.log('===============================================================================')
+  console.log('[back] Kembali ke halaman kontrak')
   rl.question('Masukan ID Kontrak: ', (input) => {
+    input.trim()
     let cariKontrak = "SELECT * FROM Kontrak where id=?"
     db.all(cariKontrak, [input], (err, rows) => {
       if (err) { return console.error(err.message); }
       else {
         if (rows.length == 1) {
+          console.log('===============================================================================')
+          console.log('Contract details')
           console.log('===============================================================================')
           console.log(`NIM                   : ${rows[0].nim}`)
           console.log(`ID Kontrak            : ${rows[0].id}`)
@@ -538,41 +564,46 @@ function searchKontrak() {
               searchKontrak();
             }
           });
-        } else {
-          console.log('ID Kontrak tidak dikenal')
+        } else if (input == 'back') { kontrakInterface(); }
+        else {
+          console.log(`Kontrak dengan ID ${input} tidak dikenal`)
           searchKontrak();
         }
       }
     })
   })
 }
-
 function tambahMahasiswa() {
+  console.log('===============================================================================')
+  console.log('[1] Kembali ke halaman Mahasiswa')
   console.log('Lengkapi data dibawah ini')
   rl.question('NIM: ', (input1) => {
+    if (input1.trim() == 1) {mahasiswaInterface();}
     rl.question('Nama: ', (input2) => {
       rl.question('Alamat: ', (input3) => {
         rl.question('Jurusan: ', (input4) => {
           rl.question('Umur: ', (input5) => {
             let sqladd = 'insert into mahasiswa(nim, nama, alamat, jurusan, umur) values (?, ?, ?, ?, ?);'
-            db.run(sqladd, [input1, input2, input3, input4, input5], (err, rows) => {
+            db.run(sqladd, [input1.trim(), input2, input3, input4.trim(), input5.trim()], (err, rows) => {
               if (err) return console.error(err.message);
             })
-            console.log(`Mahasiswa ${input2} berhasil ditambahkan`)
+            console.log(`Mahasiswa ${input2.trim()} berhasil ditambahkan`)
             tableMahasiswa();
           })
         })
       })
     })
   })
-
 }
-
 function tambahJurusan() {
+  console.log('===============================================================================')
+  console.log('[1] Kembali ke halaman Jurusan')
   console.log('Lengkapi data dibawah ini')
   rl.question('ID Jurusan: ', (input1) => {
-    rl.question('Nama: Jurusan', (input2) => {
-
+    input1.trim()
+    if (input1 == 1) {jurusanInterface();}
+    rl.question('Nama Jurusan:', (input2) => {
+      input2.trim()
       let sqladd = 'insert into jurusan(idjurusan, namajurusan) values (?, ?);'
       db.run(sqladd, [input1, input2], (err, rows) => {
         if (err) return console.error(err.message);
@@ -583,10 +614,13 @@ function tambahJurusan() {
   })
 }
 function tambahDosen() {
+  console.log('===============================================================================')
+  console.log('[1] Kembali ke halaman Dosen')
   console.log('Lengkapi data dibawah ini')
   rl.question('ID Dosen: ', (input1) => {
+    input1.trim()
+    if (input1 == 1) {dosenInterface();}
     rl.question('Nama Dosen: ', (input2) => {
-
       let sqladdD = 'insert into dosen(iddosen, nama) values (?, ?);'
       db.run(sqladdD, [input1, input2], (err, rows) => {
         if (err) return console.error(err.message);
@@ -597,10 +631,16 @@ function tambahDosen() {
   })
 }
 function tambahMatkul() {
+  console.log('===============================================================================')
+  console.log('[1] Kembali ke halaman mata kuliah')
   console.log('Lengkapi data dibawah ini')
   rl.question('ID Mata kuliah: ', (input1) => {
+    input1.trim()
+    if (input1 == 1) {matkulInterface();}
     rl.question('Nama mata kuliah: ', (input2) => {
+      input2.trim()
       rl.question('Jumlah SKS: ', (input3) => {
+        input3.trim()
         let sqladdD = 'insert into matakuliah(idmatkul, namamatkul, sks) values (?, ?, ?);'
         db.run(sqladdD, [input1, input2, input3], (err, rows) => {
           if (err) return console.error(err.message);
@@ -612,14 +652,22 @@ function tambahMatkul() {
   })
 }
 function tambahKontrak() {
+  console.log('===============================================================================')
+  console.log('[1] Kembali ke halaman mata kuliah')
   console.log('Lengkapi data dibawah ini')
   rl.question('NIM: ', (input1) => {
-    rl.question('ID Jurusan: ', (input2) => {
+    input1.trim()
+    if (input1 == 1) {kontrakInterface();}
+    rl.question('ID Dosen: ', (input2) => {
+      input2.trim()
       rl.question('ID Matkul: ', (input3) => {
-        rl.question('ID Dosen: ', (input4) => {
+        input3.trim()
+        rl.question('ID Jurusan: ', (input4) => {
+          input4.trim()
           rl.question('Nilai: ', (input5) => {
+            input5.trim()
             let sqladd = 'insert into kontrak(nilai, nim, dosen_id, matkul_id, jurusan_id) values (?, ?, ?, ?, ?);'
-            db.run(sqladd, [input5, input1, input4, input3, input2], (err, rows) => {
+            db.run(sqladd, [input5, input1, input2, input3, input4], (err, rows) => {
               if (err) return console.error(err.message);
             })
             console.log(`Kontrak untuk NIM ${input2} berhasil ditambahkan`)
@@ -629,61 +677,136 @@ function tambahKontrak() {
       })
     })
   })
-
 }
 function hapusMahasiswa() {
+  console.log('===============================================================================')
+  console.log('[1] Kembali ke halaman Mahasiswa')
   rl.question('Masukkan NIM Mahasiswa yang akan dihapus: ', (input1) => {
-    let sqldelete = 'delete from mahasiswa where nim=?;'
-    db.run(sqldelete, [input1], (err, rows) => {
-      if (err) return console.error(err.message);
+    input1.trim()
+    let carimahasiswa = "SELECT * FROM mahasiswa where nim=?"
+    db.all(carimahasiswa, [input1], (err, rows) => {
+      if (err) { return console.error(err.message); }
+      else {
+        if (rows.length == 1) {
+          let sqldelete = 'delete from mahasiswa where nim=?;'
+          db.run(sqldelete, [input1], (err, rows) => {
+            if (err) return console.error(err.message);
+          })
+          console.log(`Mahasiswa dengan NIM ${input1} berhasil dihapus.`)
+          tableMahasiswa();
+        } else if (input1 == 1) { mahasiswaInterface(); } //
+        else {
+          console.log(`Mahasiswa dengan NIM ${input1} tidak dikenal`)
+          hapusMahasiswa()
+        }
+      }
     })
-    console.log(`Mahasiswa dengan NIM ${input1} berhasil dihapus.`)
-    tableMahasiswa();
   })
 }
 function hapusJurusan() {
+  console.log('===============================================================================')
+  console.log('[1] Kembali ke halaman Jurusan')
   rl.question('Masukkan ID Jurusan yang akan dihapus: ', (input1) => {
-    let sqldelete = 'delete from jurusan where idjurusan=?;'
-    db.run(sqldelete, [input1], (err, rows) => {
-      if (err) return console.error(err.message);
+    input1.trim()
+    let carijurusan = "SELECT * FROM jurusan where idjurusan=?"
+    db.all(carijurusan, [input1], (err, rows) => {
+      if (err) { return console.error(err.message); }
+      else {
+        if (rows.length == 1) {
+
+          let sqldelete = 'delete from jurusan where idjurusan=?;'
+          db.run(sqldelete, [input1], (err, rows) => {
+            if (err) return console.error(err.message);
+          })
+          console.log(`Jurusan dengan ID ${input1} berhasil dihapus.`)
+          tableJurusan();
+        } else if (input1 == 1) { jurusanInterface(); }
+        else {
+          console.log(`Jurusan dengan ID ${input1} tidak dikenal`)
+          searchJurusan()
+        }
+      }
     })
-    console.log(`Jurusan dengan ID ${input1} berhasil dihapus.`)
-    tableJurusan();
-  })
+  }
+  )
 }
 function hapusDosen() {
+  console.log('===============================================================================')
+  console.log('[1] Kembali ke halaman Dosen')
   rl.question('Masukkan ID Dosen yang akan dihapus: ', (input1) => {
-    let sqldelete = 'delete from dosen where iddosen=?;'
-    db.run(sqldelete, [input1], (err, rows) => {
-      if (err) return console.error(err.message);
+    input1.trim()
+    let caridosen = "SELECT * FROM dosen where iddosen=?"
+    db.all(caridosen, [input1], (err, rows) => {
+      if (err) { return console.error(err.message); }
+      else {
+        if (rows.length == 1) {
+          let sqldelete = 'delete from dosen where iddosen=?;'
+          db.run(sqldelete, [input1], (err, rows) => {
+            if (err) return console.error(err.message);
+          })
+          console.log(`Dosen dengan ID ${input1} berhasil dihapus.`)
+          tableDosen();
+        } else if (input1 == 1) { dosenInterface(); }
+        else {
+          console.log(`Dosen dengan ID ${input1} tidak dikenal`)
+          searchDosen()
+        }
+      }
     })
-    console.log(`Dosen dengan ID ${input1} berhasil dihapus.`)
-    tableDosen();
   })
 }
 function hapusMatkul() {
+  console.log('===============================================================================')
+  console.log('[1] Kembali ke halaman mata kuliah')
   rl.question('Masukkan ID Mata kuliah yang akan dihapus: ', (input1) => {
-    let sqldelete = 'delete from matakuliah where idmatkul=?;'
-    db.run(sqldelete, [input1], (err, rows) => {
-      if (err) return console.error(err.message);
+    input1.trim()
+    let carimatkul = "SELECT * FROM matakuliah where idmatkul=?"
+    db.all(carimatkul, [input1], (err, rows) => {
+      if (err) { return console.error(err.message); }
+      else {
+        if (rows.length == 1) {
+          let sqldelete = 'delete from matakuliah where idmatkul=?;'
+          db.run(sqldelete, [input1], (err, rows) => {
+            if (err) return console.error(err.message);
+          })
+          console.log(`Mata kuliah dengan ID ${input1} berhasil dihapus.`)
+          tableMatkul();
+        } else if (input1 == 1) { matkulInterface(); }
+        else {
+          console.log(`Matkul dengan ID ${input1} tidak dikenal`)
+          searchMatkul()
+        }
+      }
     })
-    console.log(`Mata kuliah dengan ID ${input1} berhasil dihapus.`)
-    tableMatkul();
   })
 }
 function hapusKontrak() {
+  console.log('===============================================================================')
+  console.log('[back] Kembali ke halaman Kontrak')
   rl.question('Masukkan ID Kontrak yang akan dihapus: ', (input1) => {
-    let sqldelete = 'delete from kontrak where id=?;'
-    db.run(sqldelete, [input1], (err, rows) => {
-      if (err) return console.error(err.message);
+    input1.trim();
+    input1.toLowerCase();
+    let cariKontrak = "SELECT * FROM Kontrak where id=?"
+    db.all(cariKontrak, [input1], (err, rows) => {
+      if (err) { return console.error(err.message); }
+      else {
+        if (rows.length == 1) {
+          let sqldelete = 'delete from kontrak where id=?;'
+          db.run(sqldelete, [input1], (err, rows) => {
+            if (err) return console.error(err.message);
+          })
+          console.log(`Kontrak dengan ID ${input1} berhasil dihapus.`)
+          tableKontrak();
+        } else if (input1 == 'back') { kontrakInterface(); }
+        else {
+          console.log(`Kontrak dengan ID ${input1} tidak dikenal`)
+          searchKontrak();
+        }
+      }
     })
-    console.log(`Kontrak dengan ID ${input1} berhasil dihapus.`)
-    tableKontrak();
   })
 }
-rl.on('close', function() {
-  console.log('===============================================================================')
-  console.log('Kamu telah keluar.');
-  loginInterface();
-});
+
+  
+
 
