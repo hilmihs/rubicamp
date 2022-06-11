@@ -361,7 +361,7 @@ function tableKontrak() {
           else {
             console.log('===============================================================================')
             console.log('Perintah tidak dikenal')
-            tableMatkul();
+            tableKontrak();
           }
         });
       }
