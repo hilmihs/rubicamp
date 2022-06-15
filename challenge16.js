@@ -1,8 +1,6 @@
 const {v4 : uuidv4} = require('uuid')
 const newId = uuidv4()
-
 class CarFactory {
-
     constructor(companyName) {
         this.companyName = companyName
         this.cars = []
@@ -19,23 +17,18 @@ class CarFactory {
         for (let i = 1; i <= CarFactory.random(); i++) {  
                 const mobilbaru = new Agya(i, year)
                 this.cars.push(mobilbaru)
-                simpan1++;
-                
+                simpan1++; 
         }
         for (let i = 1; i <= CarFactory.random(); i++) {  
             const mobilbaru = new Avanza(i, year)
             this.cars.push(mobilbaru)
-            simpan2++;
-            
+            simpan2++;   
     }
     console.log(`Pada tahun ${year} pabrik ${this.companyName} menghasilkan sebanyak ${simpan1 + simpan2} mobil.`)
     console.log('=====================================================================')
     console.log('Daftar Mobil')   
     console.log(this.cars);
-        
-        
-    
-    } // masih ada yg kurang, di bikin bagaimana caranya banyak objek agya dimasukkan ke array cars, menggunakan random, dari 0 sampai 10 -logic-
+    } 
     warrantSimulator(year) {
         console.log('=====================================================================')
         console.log('Simulasi Garansi')
@@ -47,12 +40,9 @@ class CarFactory {
                     console.log(`Garansi ${this.cars[i].varian} tahun produksi ${this.cars[i].productionYear} No. ${this.cars[i].engineNumber} pada tahun ${year} = EXPIRED.`)
                 }
         }
-
     }
 }
-
 class Car {
-
     constructor(varian, color, ban, pintu, kursi, year) {
         this.varian = varian;
         this.color = color;
@@ -68,39 +58,27 @@ class Tyre {
         this.tyreBrand = brand
     }
 }
-
-
-
 class Agya extends Car {
     constructor(i, year) {
-
     let color = Math.floor((Math.random() * 3))
     let arrayColor = ['Black', 'White', 'Silver']
         super('Agya', arrayColor[color], new Tyre(17, 'dunlop'), 4, 5, year)
         this.warrantLimit = 2;
-        this.engineNumber = uuidv4();
-        
-        
+        this.engineNumber = uuidv4();  
     }
 }
-
 class Avanza extends Car {
     constructor(i, year) {
-  
     let color = Math.floor((Math.random() * 3));
     let arrayColor = ['Black', 'White', 'Silver']
         super('Avanza', arrayColor[color], new Tyre(17, 'bridgestone'), 4, 6, year)
         this.warrantLimit = 4;
-        this.engineNumber = uuidv4();
-        
+        this.engineNumber = uuidv4(); 
     }
 }
-
-
 const toyota = new CarFactory('Toyota')
 toyota.hasilProduksi(2021);
 toyota.hasilProduksi(2022);
-
 toyota.warrantSimulator(2025);
 
 
