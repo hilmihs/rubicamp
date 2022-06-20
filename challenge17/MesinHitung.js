@@ -24,11 +24,11 @@ export class MesinHitung {
         return this;
     }
     exponent(x) {
-        this.x = this.x ** x;
+        this.x = Math.pow(this.x, x);
         return this;
     }
     squareRoot() {
-        this.x = Math.sqrt(this.x);
+        this.x = Math.pow(this.x, 0.5);
         return this;
     }
     result ()  {          
