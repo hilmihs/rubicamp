@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Siswa</title>
+</head>
+
+<body>
+  <style>
+    .button {
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+
+    .button1 {
+      background-color: #006e04;
+      border-radius: 6px;
+    }
+
+    .button2 {
+      background-color: #ff0000;
+      border-radius: 6px;
+    }
+
+    .button3 {
+      background-color: blue;
+      border-radius: 6px;
+    }
+
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td,
+    th {
+      border-bottom: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px
+    }
+
+    tr:nth-child(odd) {
+      background-color: #f2f2f2;
+      border-collapse: collapse;
+
+    }
+
+    th {
+      background-color: #ffffff;
+    }
+  </style>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>String</th>
+        <th>Integer</th>
+        <th>Float</th>
+        <th>Date</th>
+        <th>Boolean</th>
+        <th colspan="2">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% rows.forEach((item, index)=> { %>
+        <tr>
+          <td>
+            <%= index + 1 %>
+          </td>
+          <td>
+            <%= item.string %>
+          </td>
+          <td>
+            <%= item.integer %>
+          </td>
+          <td>
+            <%= item.float %>
+          </td>
+          <td>
+            <%= item.date %>
+          </td>
+          <td>
+            <%= item.boolean %>
+          </td>
+          <td>
+            <button class="button button1" onclick="location.href='/edit/<%= index %>';">Edit</button>
+            <button class="button button2" onclick="location.href='/delete/<%= index %>';">Delete</button>
+          </td>
+        </tr>
+        <% }) %>
+    </tbody>
+  </table>
+  <br>
+  <button class="button button3" onclick="location.href='/add';">Tambah</button>
+</body>
+
+</html>
