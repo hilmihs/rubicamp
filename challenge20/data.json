@@ -1,0 +1,66 @@
+[
+   {
+      "id": "3",
+      "string": "Bes",
+      "integer": "9349",
+      "float": "9.1241",
+      "date": "2016-05-23",
+      "boolean": "false"
+   },
+   {
+      "string": "Ujung Berung",
+      "integer": "8811",
+      "float": "2.345",
+      "date": "1888-12-23",
+      "boolean": "true"
+   },
+   {
+      "string": "Ya",
+      "integer": "8543",
+      "float": "99.124",
+      "date": "1998-01-04",
+      "boolean": "false"
+   },
+   {
+      "string": "Tes",
+      "integer": "11",
+      "float": "0.11",
+      "date": "2210-02-05",
+      "boolean": "false"
+   },
+   {
+      "string": "aaaa",
+      "integer": "125",
+      "float": "0.125",
+      "date": "1192-06-06",
+      "boolean": "true"
+   },
+   {
+      "string": "bbbbb",
+      "integer": "55555",
+      "float": "0.1234",
+      "date": "0102-01-02",
+      "boolean": "true"
+   },
+   {
+      "string": "aa",
+      "integer": "24",
+      "float": "11",
+      "date": "1999-02-22",
+      "boolean": "true"
+   },
+   {
+      "string": "cccc",
+      "integer": "2222",
+      "float": "0.124",
+      "date": "0111-01-01",
+      "boolean": "true"
+   },
+   {
+      "string": "ddddd",
+      "integer": "455",
+      "float": "9.124",
+      "date": "1999-02-10",
+      "boolean": "false"
+   }
+]

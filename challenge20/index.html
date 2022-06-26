@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .button {
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}   
+
+.button1 {background-color: #006e04;} /* Green */
+.button2 {background-color: #ff0000;}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+td, th {
+  border-bottom: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px
+
+}
+tr:nth-child(odd) {
+  background-color: #f2f2f2;
+  border-collapse: collapse;
+
+}
+th {
+  background-color: #ffffff;
+}
+
+    </style>
+</head>
+<body>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>String</th>
+          <th>Integer</th>
+          <th>Float</th>
+          <th>Date</th>
+          <th>Boolean</th>
+          <th colspan="2">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>testing</td>
+          <td>12</td>
+          <td>1.45</td>
+          <td>12 Desember 2017 </td>
+          <td>true</td>
+          <td>
+            <button class="button button1">Edit</button>
+            <button class="button button2">Delete</button>
+        </td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>tester</td>
+          <td>24</td>
+          <td>1.75</td>
+          <td>12 Desember 2022 </td>
+          <td>false</td>
+          <td>
+            <button class="button button1">Edit</button>
+            <button class="button button2">Delete</button>
+        </td>
+        </tr>
+      </tbody> 
+      </table>
+</body>
+</html>
