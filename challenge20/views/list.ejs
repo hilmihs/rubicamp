@@ -59,6 +59,7 @@
     th {
       background-color: #ffffff;
     }
+
     /* html {
     height: 100%;
     width: 100%;
@@ -84,7 +85,7 @@ body:before {
     vertical-align: middle;
 } */
 
-/* #pagination {
+    /* #pagination {
     display: inline-block;
     vertical-align: middle;
     border-radius: 4px;
@@ -154,10 +155,10 @@ body:before {
       </tr>
     </thead>
     <tbody>
-      <% rows.forEach((item, index) => { %>
+      <% rows.forEach((item)=> { %>
         <tr>
           <td>
-            <%= index + 1 %>
+            <%= item.id %>
           </td>
           <td>
             <%= item.string %>
@@ -183,7 +184,16 @@ body:before {
     </tbody>
   </table>
   <br>
-  <button class="button button3" onclick="location.href='/add';">Tambah</button>
+  <button class="button button3" onclick="location.href='/add';">Tambah</button><br>
+  <button <%= currentPage == 1 ? 'disabled' : null %> class="button button3" onclick="location.href='/?page=<%=(currentPage - 1)%>'">Previous</button>
+  <% for (let i= 1; i <= page; i++) { %>
+    <button class="button button3" onclick="location.href='/?page=<%= i %>';">
+      <%= i %>
+    </button>
+    <% } %>
+    <button <%= currentPage ==  page ? 'disabled' : null %> class="button button3" onclick="location.href='/?page=<%=(currentPage + 1)%>'">Next</button><br>
+    
+    
 </body>
 
 </html>
