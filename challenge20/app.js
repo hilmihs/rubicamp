@@ -4,9 +4,9 @@ const express = require('express')
 const path = require('path')
 const fs = require('fs')
 const bodyParser = require('body-parser')
-const { start } = require('repl')
+const url = require('url')
 const app = express()
-const port = 3000
+const port = 3020
 let data;
 let allData;
 
@@ -15,8 +15,49 @@ const db = new sqlite3.Database('data.db', sqlite3.OPEN_READWRITE, (err) => {
 });
 
 
-function listDb(callback) {
-  db.all("SELECT * FROM data ORDER BY id ASC", [], (err, rows) => {
+function listDb(input, offset, callback) {
+  let sql = "SELECT * FROM data";
+  if (input.idCB == 'on' && input.id !== '') {
+    sql = sql + " WHERE id =" + input.id
+  }
+  if (input.stringCB == 'on' && input.string !== '') {
+    if (sql.includes("WHERE")) {
+      sql = sql + ` AND string = '${input.string}'`
+    } else {
+      sql = sql + ` WHERE string = '${input.string}'`
+    }
+  }
+  if (input.integerCB == 'on' && input.integer !== '') {
+    if (sql.includes('WHERE')) {
+      sql = sql + " AND integerinput =" + input.integer
+    } else {
+      sql = sql + " WHERE integerinput =" + input.integer
+    }
+  }
+  if (input.floatCB == 'on' && input.float !== '') {
+    if (sql.includes('WHERE')) {
+      sql = sql + " AND floatinput =" + input.float
+    } else {
+      sql = sql + " WHERE floatinput =" + input.float
+    }
+  }
+  if (input.dateCB == 'on' && input.startDate !== '') {
+    if (sql.includes('WHERE')) {
+      sql = sql + ` AND dateinput BETWEEN '${input.StartDate}' AND '${input.EndDate}'`
+    } else {
+      sql = sql + ` WHERE dateinput BETWEEN '${input.StartDate}' AND '${input.EndDate}'`
+    }
+  }
+  if (input.booleanCB == 'on' && input.boolean !== '') {
+    if (sql.includes('WHERE')) {
+      sql = sql + ` AND booleaninput = '${input.boolean}'`
+    } else {
+      sql = sql + ` WHERE booleaninput = '${input.boolean}'`
+    }
+  }
+  sql = sql + " ORDER BY id ASC LIMIT 3 OFFSET ?"
+  console.log(sql)
+  db.all(sql, [offset], (err, rows) => {
     if (err) {
       return console.error(err.message);
     } else {
@@ -25,8 +66,59 @@ function listDb(callback) {
   })
 }
 
-function paginatedList(offset, callback) {
-  db.all("SELECT * FROM data ORDER BY id ASC LIMIT 3 OFFSET ?", [offset], (err, rows) => {
+function countData(input, callback) {
+  let total = "SELECT COUNT(*) AS total FROM data"
+  if (input.idCB == 'on' && input.id !== '') {
+    total = total + " WHERE id =" + input.id
+  }
+  if (input.stringCB == 'on' && input.string !== '') {
+    if (total.includes("WHERE")) {
+      total = total + ` AND string = '${input.string}'`
+    } else {
+      total = total + ` WHERE string = '${input.string}'`
+    }
+  }
+  if (input.integerCB == 'on' && input.integer !== '') {
+    if (total.includes('WHERE')) {
+      total = total + " AND integerinput =" + input.integer
+    } else {
+      total = total + " WHERE integerinput =" + input.integer
+    }
+  }
+  if (input.floatCB == 'on' && input.float !== '') {
+    if (total.includes('WHERE')) {
+      total = total + " AND floatinput =" + input.float
+    } else {
+      total = total + " WHERE floatinput =" + input.float
+    }
+  }
+  if (input.dateCB == 'on' && input.startDate !== '') {
+    if (total.includes('WHERE')) {
+      total = total + ` AND dateinput BETWEEN '${input.StartDate}' AND '${input.EndDate}'`
+    } else {
+      total = total + ` WHERE dateinput BETWEEN '${input.StartDate}' AND '${input.EndDate}'`
+    }
+  }
+  if (input.booleanCB == 'on' && input.boolean !== '') {
+    if (total.includes('WHERE')) {
+      total = total + ` AND booleaninput = '${input.boolean}'`
+    } else {
+      total = total + ` WHERE booleaninput = '${input.boolean}'`
+    }
+  }
+  total = total + " ORDER BY id ASC"
+
+  db.all(total, [], (err, total) => {
+    if (err) {
+      return console.error(err.message);
+    } else {
+      callback(total)
+    }
+  })
+}
+
+function indexList(callback) {
+  db.all("SELECT * FROM data ORDER BY id ASC", [], (err, rows) => {
     if (err) {
       return console.error(err.message);
     } else {
@@ -71,46 +163,45 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
+
   const limit = 3
   let currentOffset;
   let totalPage;
+  let pageInput = parseInt(req.query.page)
+  let currentLink;
   if (!req.query.page) {
     currentOffset = 1;
+    pageInput = 1;
   } else {
     currentOffset = parseInt(req.query.page);
   }
   const offset = (limit * currentOffset) - limit;
-  paginatedList(offset, (rows) => {
+  listDb(req.query, offset, (rows) => {
+    console.log(rows)
     data = rows;
-  //   const page = parseInt(req.query.page);  
-  //   const limit = parseInt(req.query.limit);
-
-  //   const startIndex = (page - 1) * limit;
-  //   const endIndex = page * limit;
-  //   const results = {}
-  //   if (endIndex < data.length) {
-  //   results.next = {
-  //     page: page + 1,
-  //     limit: limit
-  //   }
-  // }
-  //   if (startIndex > 0) {
-  //   results.previous = {
-  //     page: page - 1,
-  //     limit: limit
-  //   }
-  // }
-  //   results.results = data.slice(startIndex, endIndex); 
-listDb((rows) => {
-  allData = rows;
- 
-  totalPage = Math.ceil(allData.length / limit);
-  console.log(totalPage)
-    res.render('list', { rows: data, page: totalPage, currentPage: parseInt(req.query.page) })
+    countData(req.query, (rows) => {
+      total = rows;
+      totalPage = Math.ceil(total[0].total / limit);
+      if (req.url === '/') {
+        currentLink = '/?page=1'
+      } else {
+        if (req.url.includes('/?page')) {
+          currentLink = req.url
+        } else {
+          if (req.url.includes('&page=')) {
+            currentLink = req.url
+          } else {
+            if (req.url.includes('&page=')) {
+            } else {
+          currentLink = req.url + `&page=${pageInput}`
+        }
+        }
+        }
+      }
+      res.render('list', { rows: data, page: totalPage, currentPage: pageInput, query: req.query, link: req.url, currentUrl: currentLink })
+    })
   })
 })
-})
-
 app.get('/add', (req, res) => {
   res.render('add')
 })
@@ -121,7 +212,7 @@ app.post('/add', (req, res) => {
 })
 
 app.get('/edit/:id', (req, res) => {
-  listDb((rows) => {
+  indexList((rows) => {
     data = rows;
     res.render('edit', { item: data[req.params.id - 1], index: parseInt(req.params.id) })
   })
@@ -136,24 +227,6 @@ app.get('/delete/:id', (req, res) => {
   deleteDb(req.params.id);
   res.redirect('/');
 })
-
-// [Dikerjakan setelah pagination selesai]
-// app.get('/search', (req, res) => {
-//   res.render('search')
-// })
-
-// app.post('/search', (req, res) => {
-//   let id = req.body.id;
-//   let string = req.body.string;
-//   let integer = req.body.integer;
-//   let float = req.body.float;
-//   let startDate = req.body.StartDate;
-//   let endDate = req.body.EndDate;
-//   let boolean = req.body.boolean;
-//   let idRadio = req.body.idRadio;
-//   console.log(`${id}, ${idRadio} ${string}, ${integer}, ${float}, ${startDate}, ${endDate}, ${boolean}`)
-//   res.redirect('/')
-// })
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
